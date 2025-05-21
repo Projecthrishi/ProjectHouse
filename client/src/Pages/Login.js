@@ -12,19 +12,18 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     try {
       const response = await axios.post("http://localhost:5000/api/auth/login", {
         email: form.email,
         password: form.password,
       });
-  
+
       const { role } = response.data;
-  
-      if (form.email.trim() === "testuser1@gmail.com" && form.password.trim() === "2003") {
+
+      if (role === "project-manager") {
         navigate("/add-project");
-      }
-       else if (role === "admin") {
+      } else if (role === "admin") {
         navigate("/admin");
       } else {
         navigate("/store"); // normal user redirect
@@ -34,7 +33,6 @@ export default function Login() {
       alert("Login failed! Please check your credentials.");
     }
   };
-  
 
   return (
     <>
