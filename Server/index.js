@@ -17,14 +17,17 @@ app.use("/api/auth", authRoutes);
 app.use("/api/projects", projectRoutes);
 app.use("/api/payment", paymentRoutes);
 
-// MongoDB Connection
-mongoose.connect("mongodb://127.0.0.1:27017/yourdbname", {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
+// MongoDB Atlas Connection
+const uri = "mongodb+srv://Hrishi:Hrishi2003@project.z7kmgao.mongodb.net/project?retryWrites=true&w=majority&appName=project";
+
+
+mongoose.connect(uri, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
 })
 .then(() => console.log("🍌 MongoDB connected"))
 .catch((err) => console.error("MongoDB connection error:", err));
 
 // Server
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`💀 Server running on port ${PORT} 👀`));
