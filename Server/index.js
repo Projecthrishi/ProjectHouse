@@ -9,13 +9,35 @@ import paymentRoutes from "./Routes/payments.js";
 const app = express();
 
 // Middleware
-app.use(cors());
+
+
+const allowedOrigins = [
+  "http://localhost:3000", // your local frontend
+  "https://your-frontend-domain.onrender.com", // deployed frontend
+];
+
+app.use(cors({
+  origin: function(origin, callback) {
+    // allow requests with no origin (like curl or Postman)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.indexOf(origin) === -1) {
+      const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  },
+  credentials: true, // if you use cookies/auth
+}));
+
 app.use(express.json());
 
 // API Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/projects", projectRoutes);
 app.use("/api/payment", paymentRoutes);
+
+
+
 
 // MongoDB Atlas Connection
 const uri = "mongodb+srv://Hrishi:Hrishi2003@project.z7kmgao.mongodb.net/project?retryWrites=true&w=majority&appName=project";
