@@ -28,7 +28,7 @@ const StorePage = () => {
         order_id,
         handler: function (response) {
           axios
-            .post(`${process.env.REACT_APP_API_BASE_URL}api/payment/verify`, response)
+            .post(`${process.env.REACT_APP_API_BASE_URL}/api/payment/verify`, response)
             .then((res) => {
               alert("✅ Payment verified!");
             })
