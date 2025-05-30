@@ -62,24 +62,6 @@ router.post("/verify", (req, res) => {
 ----------------------------------- */
 
 // GET all projects
-router.get("/projects", async (req, res) => {
-  try {
-    const projects = await Project.find();
-    res.json(projects);
-  } catch (err) {
-    res.status(500).json({ message: "Server error fetching projects" });
-  }
-});
 
-// POST create a new project
-router.post("/projects", async (req, res) => {
-  try {
-    const newProject = new Project(req.body);
-    await newProject.save();
-    res.status(201).json(newProject);
-  } catch (err) {
-    res.status(500).json({ message: "Server error creating project" });
-  }
-});
 
 export default router;

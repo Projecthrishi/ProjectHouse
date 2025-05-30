@@ -12,22 +12,27 @@ const app = express();
 
 
 const allowedOrigins = [
-  "http://localhost:3000",
+  //"http://localhost:3000",
   "https://frontend-84ud.onrender.com", // Match your frontend URL
   "https://house-mf1r.onrender.com"    // Keep if still needed
 ];
 
 app.use(cors({
   origin: function(origin, callback) {
-    // allow requests with no origin (like curl or Postman)
+    console.log("CORS Origin:", origin);
     if (!origin) return callback(null, true);
-    if (allowedOrigins.indexOf(origin) === -1) {
+
+    // Normalize origins
+    const normalizedOrigin = origin.trim().toLowerCase();
+    const normalizedAllowed = allowedOrigins.map(o => o.trim().toLowerCase());
+
+    if (normalizedAllowed.indexOf(normalizedOrigin) === -1) {
       const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
       return callback(new Error(msg), false);
     }
     return callback(null, true);
   },
-  credentials: true, // if you use cookies/auth
+  credentials: true,
 }));
 
 app.use(express.json());
