@@ -13,7 +13,7 @@ const app = express();
 
 const allowedOrigins = [
   "http://localhost:3000",
-  "https://projecthouse-3.onrender.com", // Match your frontend URL
+  "https://frontend-84ud.onrender.com", // Match your frontend URL
   "https://house-mf1r.onrender.com"    // Keep if still needed
 ];
 
