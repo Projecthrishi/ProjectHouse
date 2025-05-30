@@ -8,25 +8,21 @@ import paymentRoutes from "./Routes/payments.js";
 
 const app = express();
 
-// Middleware
-
-
+// Allowed origins for CORS
 const allowedOrigins = [
-  //"http://localhost:3000",
-  "https://frontend-84ud.onrender.com", // Match your frontend URL
-  "https://house-mf1r.onrender.com"    // Keep if still needed
+  "http://localhost:3000",                  // Local frontend
+  "https://frontend-84ud.onrender.com",     // Deployed frontend
 ];
 
 app.use(cors({
-  origin: function(origin, callback) {
+  origin: function (origin, callback) {
     console.log("CORS Origin:", origin);
-    if (!origin) return callback(null, true);
+    if (!origin) return callback(null, true); // Allow non-browser tools like Postman
 
-    // Normalize origins
     const normalizedOrigin = origin.trim().toLowerCase();
     const normalizedAllowed = allowedOrigins.map(o => o.trim().toLowerCase());
 
-    if (normalizedAllowed.indexOf(normalizedOrigin) === -1) {
+    if (!normalizedAllowed.includes(normalizedOrigin)) {
       const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
       return callback(new Error(msg), false);
     }
@@ -37,25 +33,18 @@ app.use(cors({
 
 app.use(express.json());
 
-// API Routes
+// Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/projects", projectRoutes);
 app.use("/api/payment", paymentRoutes);
 
-
-
-
-// MongoDB Atlas Connection
+// MongoDB Connection URI
 const uri = "mongodb+srv://Hrishi:Hrishi2003@project.z7kmgao.mongodb.net/project?retryWrites=true&w=majority&appName=project";
 
+mongoose.connect(uri)
+  .then(() => console.log("🍌 MongoDB connected"))
+  .catch((err) => console.error("MongoDB connection error:", err));
 
-mongoose.connect(uri, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
-.then(() => console.log("🍌 MongoDB connected"))
-.catch((err) => console.error("MongoDB connection error:", err));
-
-// Server
+// Start server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`💀 Server running on port ${PORT} 👀`));
