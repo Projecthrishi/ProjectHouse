@@ -14,7 +14,7 @@ const app = express();
 const allowedOrigins = [
   "http://localhost:3000",
   "https://projecthouse-3.onrender.com", // Match your frontend URL
-  "https://projecthouse-i1ob.onrender.com"    // Keep if still needed
+  "https://house-mf1r.onrender.com"    // Keep if still needed
 ];
 
 app.use(cors({
