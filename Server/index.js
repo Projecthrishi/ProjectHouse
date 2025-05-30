@@ -12,8 +12,9 @@ const app = express();
 
 
 const allowedOrigins = [
-  "http://localhost:3000", // your local frontend
-  "https://projecthouse-2.onrender.com", // deployed frontend
+  "http://localhost:3000",
+  "https://projecthouse-qkqm.onrender.com", // Match your frontend URL
+  "https://projecthouse-2.onrender.com"    // Keep if still needed
 ];
 
 app.use(cors({

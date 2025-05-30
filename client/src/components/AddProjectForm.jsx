@@ -26,7 +26,7 @@ const techStackArray = formData.techStack
 .map((tech) => tech.trim());
 
 try {
-const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/api/projects`, {
+const response = await axios.post("http://localhost:5000/api/projects", {
 ...formData,
 techStack: techStackArray,
 });
