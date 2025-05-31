@@ -24,7 +24,7 @@ function App() {
 
   const fetchProjects = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/projects");
+      const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/projects`);
       setProjects(res.data);
     } catch (err) {
       console.error("Error fetching projects", err);
