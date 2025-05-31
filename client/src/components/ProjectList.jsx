@@ -6,7 +6,7 @@ const ProjectList = ({ projects, setProjects }) => {
   const handleDelete = async (id) => {
     console.log("Deleting project with id:", id);
     try {
-      await axios.delete(`http://localhost:5000/api/projects/${id}`);
+      await axios.delete(`${process.env.REACT_APP_API_BASE_URL}/api/projects/${id}`);
       setProjects((prev) => prev.filter((project) => project._id !== id));
     } catch (err) {
       console.error("Error deleting project", err);

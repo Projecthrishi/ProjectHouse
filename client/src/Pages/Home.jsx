@@ -8,7 +8,7 @@ const Home = () => {
   const [projects, setProjects] = useState([]);
 
   useEffect(() => {
-    axios.get("http://localhost:5000/api/projects")
+    axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/projects`)
       .then((res) => setProjects(res.data))
       .catch((err) => console.error(err));
   }, []);

@@ -6,14 +6,19 @@ const StorePage = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/api/projects")
-      .then((res) => setProjects(res.data))
-      .catch((err) => console.error("Error fetching projects:", err));
+      .get(`${process.env.REACT_APP_API_URL}/api/projects`)
+      .then((res) => {
+        setProjects(res.data);
+      })
+      .catch((err) => {
+        console.error("Error fetching projects:", err);
+      });
   }, []);
 
   const handleBuyNow = async (project) => {
     try {
-      const res = await axios.post("http://localhost:5000/api/payment/orders", {
+      const res = await axios.post(`${process.env.REACT_APP_API_URL}/api/payment/orders`, 
+        {
         amount: project.price , // ✅ CONVERT to paise
       });
 
@@ -28,7 +33,7 @@ const StorePage = () => {
         order_id,
         handler: function (response) {
           axios
-            .post("http://localhost:5000/api/payment/verify", response)
+            .post(`${process.env.REACT_APP_API_BASE_URL}/api/payment/verify`, response)
             .then((res) => {
               alert("✅ Payment verified!");
             })

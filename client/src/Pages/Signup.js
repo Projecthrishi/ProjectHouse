@@ -14,7 +14,7 @@ export default function Signup({ onSignupSuccess }) {
   const handleSubmit = async e => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:5000/api/auth/signup", form);
+      await axios.post(`${process.env.REACT_APP_API_URL}/api/auth/signup`, form);
 //       alert("Signup successful! You can now log in.");
       if (onSignupSuccess) {
         onSignupSuccess(); // Switch to login form in AuthPage
