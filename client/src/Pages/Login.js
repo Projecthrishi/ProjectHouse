@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Logo from '../images/Logo.png';
 
 export default function Login() {
   const [form, setForm] = useState({ email: "", password: "" });
@@ -36,7 +37,9 @@ export default function Login() {
 
   return (
     <>
-      <h1>Projects</h1>
+      
+      <img src={Logo} alt="Logo" width="350" />
+
       <div className="auth-container">
         <form className="auth-form" onSubmit={handleSubmit}>
           <h2 className="auth-title">Login</h2>
