@@ -10,7 +10,7 @@ const app = express();
 
 // Allowed origins for CORS
 const allowedOrigins = [
-//"http://localhost:3000",     
+"http://localhost:3000",     
                // Local frontend
   "https://projecthouse-6k0t.onrender.com",     // Deployed frontend
 ];

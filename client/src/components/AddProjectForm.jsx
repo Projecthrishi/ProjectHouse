@@ -18,38 +18,37 @@ setFormData({ ...formData, [e.target.name]: e.target.value });
 };
 
 const handleSubmit = async (e) => {
-e.preventDefault();
+  e.preventDefault();
 
-// Convert techStack string to array
-const techStackArray = formData.techStack
-.split(",")
-.map((tech) => tech.trim());
+  const techStackArray = formData.techStack
+    .split(",")
+    .map((tech) => tech.trim());
 
-try {
-const response = axios.get(`${process.env.REACT_APP_API_URL}/api/projects`, {
-...formData,
-techStack: techStackArray,
-});
+  try {
+    const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/projects`, {
+      ...formData,
+      techStack: techStackArray,
+    });
 
-setStatus("✅ Project added successfully!");
-onProjectAdded(response.data); // optional, to update UI
+    setStatus("✅ Project added successfully!");
+    onProjectAdded(response.data);
 
-// Reset form
-setFormData({
-title: "",
-description: "",
-price: "",
-techStack: "",
-downloadLink: "",
-});
+    // Reset form
+    setFormData({
+      title: "",
+      description: "",
+      price: "",
+      techStack: "",
+      downloadLink: "",
+    });
 
-// Clear status after 3 seconds
-setTimeout(() => setStatus(""), 3000);
-} catch (err) {
-console.error(err);
-setStatus("❌ Error adding project.");
-}
+    setTimeout(() => setStatus(""), 3000);
+  } catch (err) {
+    console.error(err);
+    setStatus("❌ Error adding project.");
+  }
 };
+
 
 return (
 <div className="project-form-container">
