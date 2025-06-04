@@ -7,10 +7,16 @@ export default function Login() {
   const [form, setForm] = useState({ email: "", password: "" });
   const navigate = useNavigate();
 
+
+
+
+
+
+  
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
-
+        
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -18,6 +24,7 @@ export default function Login() {
       const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/auth/login`, {
         email: form.email,
         password: form.password,
+        
       });
 
       const { role } = response.data;

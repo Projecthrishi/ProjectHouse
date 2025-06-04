@@ -5,6 +5,7 @@ import cors from "cors";
 import authRoutes from "./Routes/auth.js";
 import projectRoutes from "./Routes/projectRoutes.js";
 import paymentRoutes from "./Routes/payments.js";
+import downloadRoutes from "./Routes/download.js";
 
 const app = express();
 
@@ -38,6 +39,8 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/projects", projectRoutes);
 app.use("/api/payment", paymentRoutes);
+app.use("/api/download", downloadRoutes);
+
 
 // MongoDB Connection URI
 const uri = "mongodb+srv://Hrishi:Hrishi2003@project.z7kmgao.mongodb.net/project?retryWrites=true&w=majority&appName=project";
