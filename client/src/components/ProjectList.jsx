@@ -1,7 +1,10 @@
 import React from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const ProjectList = ({ projects, setProjects }) => {
+  const navigate = useNavigate();
+
   const handleDelete = async (id) => {
     console.log("Deleting project with id:", id);
     try {
@@ -12,9 +15,14 @@ const ProjectList = ({ projects, setProjects }) => {
     }
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem("token"); // Remove token from storage
+    navigate("/"); // Navigate to home page
+  };
+
   return (
-    <div className="project-list">
-      <h2>Project List</h2>
+    <div className="project-list" style={{ position: 'relative', minHeight: '100vh' }}>
+      <h2 style={{ textAlign: 'center' }}>Project List</h2>
       {Array.isArray(projects) && projects.length > 0 ? (
         projects.map((project) =>
           project ? (
@@ -54,6 +62,32 @@ const ProjectList = ({ projects, setProjects }) => {
       ) : (
         <p>No projects found.</p>
       )}
+      
+      {/* Logout button container */}
+      <div style={{
+        position: 'fixed',
+        bottom: '20px',
+        left: '0',
+        right: '0',
+        display: 'flex',
+        justifyContent: 'center',
+        width: '100%'
+      }}>
+        <button 
+          onClick={handleLogout} 
+          style={{ 
+            padding: "10px 20px",
+            backgroundColor: "#f44336",
+            color: "white",
+            border: "none",
+            borderRadius: "4px",
+            cursor: "pointer",
+            fontSize: "16px"
+          }}
+        >
+          Logout
+        </button>
+      </div>
     </div>
   );
 };
