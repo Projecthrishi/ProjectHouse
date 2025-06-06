@@ -7,7 +7,8 @@ const AddProjectForm = ({ onProjectAdded }) => {
     description: "",
     price: "",
     techStack: "",
-    file: null, // for zip upload
+    file: null,
+     demoLink: "", // for zip upload
   });
 
   const [status, setStatus] = useState("");
@@ -50,7 +51,7 @@ const AddProjectForm = ({ onProjectAdded }) => {
         setStatus("❌ Please upload a ZIP file.");
         return;
       }
-
+        
       // Upload file to Cloudinary
       const downloadLink = await uploadToCloudinary(formData.file);
 
@@ -61,6 +62,7 @@ const AddProjectForm = ({ onProjectAdded }) => {
         price: formData.price,
         techStack: techStackArray,
         downloadLink,
+        demoLink: formData.demoLink,
       });
 
       setStatus("✅ Project added successfully!");
@@ -121,6 +123,13 @@ const AddProjectForm = ({ onProjectAdded }) => {
           onChange={handleChange}
           className="form-input"
         />
+        <input
+  type="url"
+  placeholder="Live Demo URL"
+  value={formData.demoLink}
+  onChange={(e) => setFormData({ ...formData, demoLink: e.target.value })}
+/>
+
         <input
           type="file"
           name="file"

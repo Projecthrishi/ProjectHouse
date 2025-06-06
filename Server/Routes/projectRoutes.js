@@ -17,7 +17,7 @@ router.get("/", async (req, res) => {
 // POST a new project
 router.post("/", async (req, res) => {
   try {
-    const { title, description, techStack, price, downloadLink } = req.body;
+    const { title, description, techStack, price, downloadLink,demoLink} = req.body;
 
     const newProject = new Project({
       title,
@@ -25,6 +25,7 @@ router.post("/", async (req, res) => {
       techStack,  // ✅ match the schema
       price,
       downloadLink,
+      demoLink
     });
 
     const savedProject = await newProject.save();

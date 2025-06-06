@@ -116,14 +116,20 @@ const StorePage = () => {
             <p><strong>Stack:</strong> {project.techStack?.join(", ") || "N/A"}</p>
             <p><strong>Price:</strong> ₹{project.price}</p>
             <div className="button-group">
-              <a
-                href={project.downloadLink}
-                target="_blank"
-                rel="noreferrer"
-                className="preview-button"
-              >
-                Preview
-              </a>
+              {project.demoLink ? (
+  <a
+    href={project.demoLink}
+    target="_blank"
+    rel="noreferrer"
+    className="preview-button"
+  >
+    Live Demo
+  </a>
+) : (
+  <button className="preview-button" disabled>
+    No Demo
+  </button>
+)}
               <button
                 className="buy-now-button"
                 onClick={() => handleBuyNow(project)}

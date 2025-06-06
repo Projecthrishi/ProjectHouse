@@ -12,7 +12,8 @@ const projectSchema = new mongoose.Schema(
       required: true,
     },
     techStack: [String],
-    downloadLink: String
+    downloadLink: String,
+demoLink: String,
     // You can remove this if using timestamps
     // createdAt: {
     //   type: Date,
