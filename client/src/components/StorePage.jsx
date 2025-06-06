@@ -71,7 +71,8 @@ const StorePage = () => {
 
           // 3. Trigger download
           const link = document.createElement("a");
-          link.href = project.downloadLink;
+           link.href = downloadLink;
+;
           link.setAttribute("download", "");
           document.body.appendChild(link);
           link.click();
@@ -133,3 +134,6 @@ const StorePage = () => {
 };
 
 export default StorePage;
+
+
+

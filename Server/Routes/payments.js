@@ -1,3 +1,4 @@
+
 import express from "express";
 import crypto from "crypto";
 import Razorpay from "razorpay";
@@ -34,6 +35,7 @@ router.post("/orders", async (req, res) => {
 // ✅ Add userId and projectId in request body (from frontend)
 router.post("/verify", async (req, res) => {
   try {
+    
     const {
       razorpay_order_id,
       razorpay_payment_id,
@@ -51,6 +53,7 @@ router.post("/verify", async (req, res) => {
 
     if (expectedSignature === razorpay_signature) {
       // ✅ Save purchase to DB
+      
       const purchase = new Purchase({
         userId: new mongoose.Types.ObjectId(userId),
         projectId: new mongoose.Types.ObjectId(projectId),
@@ -72,6 +75,7 @@ router.post("/verify", async (req, res) => {
 });
 
 router.post("/save", async (req, res) => {
+  console.log("Incoming POST /save request body:", req.body); 
   try {
     const { userId, projectId, paymentId } = req.body;
 
@@ -87,7 +91,7 @@ router.post("/save", async (req, res) => {
     const newPurchase = new Purchase({
       userId,
       projectId,
-      paymentId,
+     paymentId: response.razorpay_payment_id,
     });
 
     await newPurchase.save();

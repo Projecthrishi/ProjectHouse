@@ -27,8 +27,8 @@ export default function Login() {
         
       });
 
-      const { role } = response.data;
-
+      const { role, token, userId  } = response.data;
+  localStorage.setItem("user", JSON.stringify({ _id: userId, token }));
       if (role === "project-manager") {
         navigate("/add-project");
       } else if (role === "admin") {
