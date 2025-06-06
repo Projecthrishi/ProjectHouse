@@ -19,11 +19,26 @@ const StorePage = () => {
 
  const handleBuyNow = async (project) => {
   try {
-    const res = await axios.post(`${process.env.REACT_APP_API_URL}/api/payment/orders`, {
-      amount: project.price,
-    });
+    // Get user data
+    const userString = localStorage.getItem("user");
+    if (!userString) {
+      alert("❌ Please login to make a purchase");
+      return;
+    }
+    const user = JSON.parse(userString);
+     const token = user.token;
 
-    const { id: order_id, amount, currency } = res.data;
+    // Create order
+    const orderRes = await axios.post(`${process.env.REACT_APP_API_URL}/api/payment/orders`, {
+      amount: project.price},
+        {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    const { id: order_id, amount, currency } = orderRes.data;
 
     const options = {
       key: "rzp_test_6ayj8R3LzCrrQd",
@@ -34,58 +49,49 @@ const StorePage = () => {
       order_id,
       handler: async function (response) {
         try {
-          // 1. Verify payment
+          // Verify payment with all required data
           const verifyRes = await axios.post(
             `${process.env.REACT_APP_API_URL}/api/payment/verify`,
-            response
+            {
+              ...response,
+              userId: user._id,
+              projectId: project._id
+            }
           );
 
-          alert("✅ Payment verified!");
+          if (verifyRes.data.success) {
+            // Get download link
+            const downloadRes = await axios.get(
+              `${process.env.REACT_APP_API_URL}/api/download/${project._id}`,
+              {
+                headers: {
+                  Authorization: `Bearer ${user.token}`,
+                },
+              }
+            );
 
-          // ✅ Assuming you have user data from context or props
-         const userString = localStorage.getItem("user");
-    if (!userString) {
-      alert("❌ User not logged in.");
-      return;
-    }
-
-    const user = JSON.parse(userString);
-    const userId = user._id;
-
-          // 2. Save the purchase in DB
-          await axios.post(`${process.env.REACT_APP_API_URL}/api/payment/save`, {
-            userId,
-            projectId: project._id,
-          });
-
-          const downloadRes = await axios.get(
-      `${process.env.REACT_APP_API_URL}/api/download/${project._id}`,
-      {
-        headers: {
-          Authorization: `Bearer ${user.token}`, // 👈 Include token for protect middleware
-        },
-      }
-    );
-
-    const downloadLink = downloadRes.data.downloadLink;
-
-          // 3. Trigger download
-          const link = document.createElement("a");
-           link.href = downloadLink;
-;
-          link.setAttribute("download", "");
-          document.body.appendChild(link);
-          link.click();
-          link.remove();
-
+            // Trigger download
+            if (downloadRes.data.downloadLink) {
+              const link = document.createElement("a");
+              link.href = downloadRes.data.downloadLink;
+              link.setAttribute("download", "");
+              document.body.appendChild(link);
+              link.click();
+              link.remove();
+              alert("✅ Purchase successful! Download started.");
+            }
+          } else {
+            alert("❌ Payment verification failed");
+          }
         } catch (err) {
           console.error("❌ Post-payment error:", err);
           alert("❌ Something went wrong after payment.");
         }
       },
       prefill: {
-        name: "Test User",
-        email: "test@example.com",
+        name: user.name || "User",
+        email: user.email || "user@example.com",
+        contact: user.phone || "9999999999"
       },
       theme: {
         color: "#3399cc",
@@ -99,7 +105,6 @@ const StorePage = () => {
     alert("❌ Payment failed. Try again.");
   }
 };
-
   return (
     <div className="store-container">
       <h2 className="store-title">Available Student Projects</h2>

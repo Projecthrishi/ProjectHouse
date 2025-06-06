@@ -33,27 +33,38 @@ router.post("/orders", async (req, res) => {
 // Verify payment
 // ✅ Add userId and projectId in request body (from frontend)
 // ✅ Add userId and projectId in request body (from frontend)
+// Verify payment - Updated version
 router.post("/verify", async (req, res) => {
   try {
-    
     const {
       razorpay_order_id,
       razorpay_payment_id,
       razorpay_signature,
       userId,
-      projectId,
+      projectId
     } = req.body;
 
-    const body = razorpay_order_id + "|" + razorpay_payment_id;
+    if (!userId || !projectId) {
+      return res.status(400).json({ success: false, message: "Missing user or project ID" });
+    }
 
+    const body = razorpay_order_id + "|" + razorpay_payment_id;
     const expectedSignature = crypto
       .createHmac("sha256", razorpay.key_secret)
       .update(body.toString())
       .digest("hex");
 
     if (expectedSignature === razorpay_signature) {
-      // ✅ Save purchase to DB
-      
+      // Check if purchase already exists
+      const existingPurchase = await Purchase.findOne({ userId, projectId });
+      if (existingPurchase) {
+        return res.status(200).json({
+          success: true,
+          message: "Purchase already recorded",
+        });
+      }
+
+      // Save new purchase
       const purchase = new Purchase({
         userId: new mongoose.Types.ObjectId(userId),
         projectId: new mongoose.Types.ObjectId(projectId),
@@ -74,6 +85,7 @@ router.post("/verify", async (req, res) => {
   }
 });
 
+// Remove the /save route as it's redundant
 router.post("/save", async (req, res) => {
   console.log("Incoming POST /save request body:", req.body); 
   try {
